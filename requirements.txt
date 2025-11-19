@@ -1,0 +1,2 @@
+echo "streamlit" > requirements.txt
+echo "numpy" >> requirements.txt
