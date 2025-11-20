@@ -1,2 +1,2 @@
-echo "streamlit" > requirements.txt
-echo "numpy" >> requirements.txt
+streamlit
+numpy
