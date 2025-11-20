@@ -1,47 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap'); /* Contoh font dengan gaya unik */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
 
-/* --- Terapkan Font ke Judul H1 --- */
+[data-testid="stAppViewContainer"] {
+    background-image: none; 
+    background-color: #0E1117; 
+}
+
+
 h1 {
-    font-family: 'Creepster', cursive !important; /* Gunakan nama font dari @import atau @font-face */
-    color: black !important; /* Pastikan judul terlihat di background hijau */
+    font-family: 'Poppins', sans-serif !important; /* Font Kustom Poppins SemiBold */
+    font-weight: 600 !important;
+    color: white !important; /* Warna teks putih agar terlihat di background gelap */
     text-align: center;
-    font-size: 3em; /* Perbesar ukuran font */
+    font-size: 3em; 
+    margin-top: 0.5em; /* Memberi jarak atas */
 }
 
-/* --- Override styling default Streamlit --- */
-div.stSelectbox > label {
-    color: black; /* Warna label dropdown */
+
+[data-testid="stVerticalBlock"] > div:first-child { 
+    background-color: #1F232F !important; /* Menggunakan secondaryBackgroundColor */
+    padding: 20px;
+    border-radius: 10px;
 }
-div.stRadio > label {
-    color: black; /* Warna label radio */
+
+
+[data-testid="stVerticalBlock"] > div:nth-child(3) { 
+    background-color: #1F232F !important; 
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
 }
-/* Menyesuaikan warna teks pada dropdown options */
-div[data-testid="stExpander"] div[role="button"] {
-    color: black;
-}
-p {
-    color: black; /* Warna paragraf */
-}
+
+
 div.stSuccess {
-    background-color: #388E3C; /* Warna background kotak sukses */
-    color: black; /* Warna teks di kotak sukses */
+    background-color: rgba(0, 191, 255, 0.2) !important; /* Biru cerah transparan untuk sukses */
+    color: white !important; 
 }
-/* Untuk styling tabel */
-.stDataFrame {
-    color: black; /* Warna teks di tabel */
+div.stSuccess > div > p {
+    color: white !important;
 }
+
+
 .stDataFrame thead th {
-    color: black; /* Warna header tabel */
-    background-color: #388E3C; /* Background header tabel */
-}
-.stDataFrame tbody tr {
-    color: black; /* Warna teks di body tabel */
+    background-color: #1F232F !important; 
 }
 .stDataFrame tbody td {
-    color: black;
+    color: #FAFAFA !important; 
 }
-/* Untuk styling baris aktif di tabel */
+
+
 .stDataFrame tbody tr[data-highlighted="true"] {
-    background-color: rgba(0, 0, 0, 0.1); /* Latar belakang hitam transparan untuk baris aktif */
+    background-color: rgba(255, 255, 255, 0.1) !important; 
 }
