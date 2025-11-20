@@ -1,7 +1,8 @@
+/* --- 1. Impor Font --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
 
-/* --- Background Gambar --- */
+/* --- 2. Background Gambar --- */
 [data-testid="stAppViewContainer"] {
     background-image: url('https://i.pinimg.com/736x/cf/c7/3d/cfc73dfcf6c927c5275c805cd01859b8.jpg'); 
     background-size: cover; 
@@ -10,7 +11,12 @@
     background-attachment: fixed;
 }
 
-/* --- Terapkan Font ke Judul H1 --- */
+/* --- 3. Menghapus Bilah Header Hitam --- */
+[data-testid="stHeader"] {
+    display: none !important;
+}
+
+/* --- 4. Terapkan Font ke Judul H1 --- */
 h1 {
     font-family: 'Poppins', sans-serif !important; 
     font-weight: 600 !important;
@@ -19,14 +25,14 @@ h1 {
     font-size: 3em; 
 }
 
-/* --- Override Streamlit Elements --- */
+/* --- 5. Override Streamlit Elements (Card Transparan) --- */
 [data-testid="stVerticalBlock"] > div:first-child,
 [data-testid="stVerticalBlock"] > div:nth-child(3) { 
-    background-color: rgba(0, 0, 0, 0.7) !important; /* Semi-transparan gelap untuk card */
+    /* Membuat Background Card Input Transparan */
+    background-color: rgba(0, 0, 0, 0) !important; 
     padding: 20px;
     border-radius: 10px;
 }
-
 h3, p, label {
     color: white !important; 
 }
