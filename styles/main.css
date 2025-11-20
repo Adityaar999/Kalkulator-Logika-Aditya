@@ -34,7 +34,7 @@ h1 {
     border-radius: 10px;
 }
 h3, p, label {
-    color: white !important; 
+    color: rgb(0, 0, 0) !important; 
 }
 
 /* Styling tombol */
@@ -47,7 +47,7 @@ button {
 /* Styling kotak sukses (hasil) */
 div.stSuccess {
     background-color: rgba(0, 191, 255, 0.2) !important; /* Biru cerah transparan */
-    color: white !important; 
+    color: rgb(0, 0, 0) !important; 
 }
 div.stSuccess > div > p {
     color: white !important;
