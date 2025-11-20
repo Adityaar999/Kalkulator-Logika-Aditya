@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
-
 /* --- Background Gambar --- */
 [data-testid="stAppViewContainer"] {
     background-image: url('https://i.pinimg.com/736x/cf/c7/3d/cfc73dfcf6c927c5275c805cd01859b8.jpg'); 
@@ -22,7 +21,7 @@ h1 {
 /* --- Override Streamlit Elements --- */
 [data-testid="stVerticalBlock"] > div:first-child,
 [data-testid="stVerticalBlock"] > div:nth-child(3) { 
-    /* UBAH DARI rgba(0, 0, 0, 0) KE semi-transparan (misalnya, 70%) */
+    /* CARD menjadi semi-transparan (gelap) */
     background-color: rgba(0, 0, 0, 0.7) !important; 
     padding: 20px;
     border-radius: 10px;
@@ -58,13 +57,15 @@ div.stSuccess > div > p {
 .stDataFrame tbody td {
     color: white !important;
 }
+
+/* Menghapus header dan bilah hitam atas */
 [data-testid="stHeader"] {
     display: none !important;
-}
-[data-testid="stAppViewContainer"] > div:first-child {
-    padding-top: 0px !important;
 }
 [data-testid="stAppViewContainer"] {
     padding-top: 0px !important;
     margin-top: 0px !important;
+}
+[data-testid="stAppViewContainer"] > div:first-child {
+    padding-top: 0px !important;
 }
