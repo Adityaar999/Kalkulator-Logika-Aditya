@@ -1,15 +1,10 @@
 [theme]
-# Warna primer: Biru tua/abu-abu (dari armor/latar belakang gelap)
 primaryColor="#577D7D" # Sedikit lebih terang agar tombol terlihat
 
-# Warna latar belakang utama: Sangat gelap, seperti area bayangan di wallpaper
-backgroundColor="#0D1117" 
+backgroundColor="#ffffffff" 
 
-# Warna latar belakang sekunder: Untuk kontainer/kotak, sedikit lebih terang dari background utama
 secondaryBackgroundColor="#1C232F" 
 
-# Warna teks: Putih terang agar mudah dibaca di latar belakang gelap
 textColor="#FAFAFA" 
 
-# Font tetap sans serif
 font="sans serif"
