@@ -22,8 +22,8 @@ h1 {
 /* --- Override Streamlit Elements --- */
 [data-testid="stVerticalBlock"] > div:first-child,
 [data-testid="stVerticalBlock"] > div:nth-child(3) { 
-    /* UBAH background-color menjadi transparan (rgba(0,0,0,0) atau komentar) */
-    background-color: rgba(0, 0, 0, 0) !important; /* Membuat Background Transparan */
+    /* UBAH DARI rgba(0, 0, 0, 0) KE semi-transparan (misalnya, 70%) */
+    background-color: rgba(0, 0, 0, 0.7) !important; 
     padding: 20px;
     border-radius: 10px;
 }

@@ -114,8 +114,8 @@ with st.container(border=True):
             
 
     with col4:
-        st.markdown("<br>", unsafe_allow_html=True) 
-        if st.button("HITUNG", width='stretch', key="btn_hitung"): # Perbaikan: width='stretch'
+        st.markdown("<div style='height: 32px;'></div>", unsafe_allow_html=True) 
+        if st.button("HITUNG", width='stretch', key="btn_hitung"):
             st.session_state['calculated'] = True
             st.session_state['last_A'] = A 
             st.session_state['last_B'] = B 
