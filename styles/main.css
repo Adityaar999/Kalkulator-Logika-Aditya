@@ -1,54 +1,61 @@
+/* --- Mengimpor Font Poleno Alternatif (Poppins SemiBold 600) --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
 
+/* --- Background Gambar --- */
 [data-testid="stAppViewContainer"] {
-    background-image: none; 
-    background-color: #0E1117; 
+    background-image: url('https://i.imgur.com/your-wolf-background-image.jpg'); /* !!! GANTI DENGAN URL GAMBAR ANDA !!! */
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-
+/* --- Terapkan Font ke Judul H1 --- */
 h1 {
-    font-family: 'Poppins', sans-serif !important; /* Font Kustom Poppins SemiBold */
+    font-family: 'Poppins', sans-serif !important; 
     font-weight: 600 !important;
-    color: white !important; /* Warna teks putih agar terlihat di background gelap */
+    color: white !important; 
     text-align: center;
     font-size: 3em; 
-    margin-top: 0.5em; /* Memberi jarak atas */
 }
 
-
-[data-testid="stVerticalBlock"] > div:first-child { 
-    background-color: #1F232F !important; /* Menggunakan secondaryBackgroundColor */
+/* --- Override Streamlit Elements --- */
+[data-testid="stVerticalBlock"] > div:first-child,
+[data-testid="stVerticalBlock"] > div:nth-child(3) { 
+    background-color: rgba(0, 0, 0, 0.7) !important; /* Semi-transparan gelap untuk card */
     padding: 20px;
     border-radius: 10px;
 }
 
-
-[data-testid="stVerticalBlock"] > div:nth-child(3) { 
-    background-color: #1F232F !important; 
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 10px;
+h3, p, label {
+    color: white !important; 
 }
 
+/* Styling tombol */
+button {
+    background-color: #00BFFF !important; /* Biru cerah */
+    color: white !important;
+    border: none !important;
+}
 
+/* Styling kotak sukses (hasil) */
 div.stSuccess {
-    background-color: rgba(0, 191, 255, 0.2) !important; /* Biru cerah transparan untuk sukses */
+    background-color: rgba(0, 191, 255, 0.2) !important; /* Biru cerah transparan */
     color: white !important; 
 }
 div.stSuccess > div > p {
     color: white !important;
 }
 
-
+/* Styling Tabel */
 .stDataFrame thead th {
-    background-color: #1F232F !important; 
+    color: white !important; 
+    background-color: rgba(255, 255, 255, 0.1) !important; 
+}
+.stDataFrame tbody tr[data-highlighted="true"] {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* Baris aktif */
 }
 .stDataFrame tbody td {
-    color: #FAFAFA !important; 
-}
-
-
-.stDataFrame tbody tr[data-highlighted="true"] {
-    background-color: rgba(255, 255, 255, 0.1) !important; 
+    color: white !important;
 }

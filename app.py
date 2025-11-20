@@ -163,30 +163,43 @@ if st.session_state.get('calculated', False):
             st.success(f"Output **{selected_gate}** dari **{A_display}** dan **{B_display}** adalah: **{hasil}**")
 
 
-# 7. TABEL KEBENARAN
+# # --- 7. TABEL KEBENARAN ---
 st.markdown("---")
-st.subheader("Tabel Kebenaran")
+
+# Ambil nilai gerbang yang dipilih dari selectbox (untuk eksekusi awal/perubahan)
+# Kita pastikan selected_gate selalu memiliki nilai di sini.
+current_selected_gate = selected_gate 
+
+# Tampilkan Judul Tabel
+st.subheader(f"📋 Tabel Kebenaran {current_selected_gate}")
 
 # --- Memproses Data Tabel ---
-if selected_gate != 'NOT':
-    # Data Gerbang 2 Input (AND, OR, XOR)
+if current_selected_gate not in ('NOT'):
+    # Data Gerbang 2 Input (AND, OR, XOR, NAND, NOR, XNOR)
+    
+    # Ambil fungsi gerbang dari globals()
+    # PENTING: Kita menggunakan current_selected_gate, BUKAN variabel yang belum tentu didefinisikan.
+    gate_func = globals()[f'gate_{current_selected_gate.lower()}']
+    
     data = {
         'A': [0, 0, 1, 1],
         'B': [0, 1, 0, 1],
-        f'Output': [
-            globals()[f'gate_{selected_gate.lower()}'](0, 0),
-            globals()[f'gate_{selected_gate.lower()}'](0, 1),
-            globals()[f'gate_{selected_gate.lower()}'](1, 0),
-            globals()[f'gate_{selected_gate.lower()}'](1, 1),
+        f'Output ({current_selected_gate})': [ # Ganti 'Output' dengan 'Output (Gerbang)'
+            gate_func(0, 0),
+            gate_func(0, 1),
+            gate_func(1, 0),
+            gate_func(1, 1),
         ]
     }
     df = pd.DataFrame(data)
     
     # 1. Terapkan styling sel Output (hijau jika 1)
-    styled_df = df.style.applymap(style_output, subset=['Output'])
+    # Gunakan nama kolom yang sudah diperbarui
+    styled_df = df.style.applymap(style_output, subset=[f'Output ({current_selected_gate})'])
     
     # 2. Terapkan styling baris (sorot baris yang baru dihitung)
-    styled_df = styled_df.apply(highlight_current_row, axis=1) 
+    if st.session_state.get('calculated', False):
+        styled_df = styled_df.apply(highlight_current_row, axis=1) 
     
     st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
@@ -195,14 +208,15 @@ else:
     # Data Gerbang NOT
     data = {
         'A': [0, 1],
-        f'Output': [gate_not(0), gate_not(1)],
+        f'Output (NOT)': [gate_not(0), gate_not(1)],
     }
     df = pd.DataFrame(data)
     
     # 1. Terapkan styling sel Output (hijau jika 1)
-    styled_df = df.style.applymap(style_output, subset=['Output'])
+    styled_df = df.style.applymap(style_output, subset=[f'Output (NOT)'])
     
     # 2. Terapkan styling baris khusus NOT
-    styled_df = styled_df.apply(highlight_not_row, axis=1)
+    if st.session_state.get('calculated', False):
+        styled_df = styled_df.apply(highlight_not_row, axis=1)
 
     st.dataframe(styled_df, use_container_width=True, hide_index=True)
