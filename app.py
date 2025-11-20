@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd # <-- PERBARUAN: Tambahkan import Pandas
 
 # --- Fungsi Logika Gerbang ---
 def gate_and(A, B):
@@ -17,10 +18,29 @@ def gate_xor(A, B):
     # XOR: Output 1 jika input BERBEDA
     return 1 if (A != B) else 0
 
+# --- Fungsi Styling untuk HTML ---
+def style_output(val):
+    """Mengembalikan style CSS/HTML untuk menyorot Output = 1 (True)"""
+    # Warna yang mirip dengan tampilan True pada Streamlit
+    if val == 1:
+        color = "#00FF7F" # Hijau Cerah
+        background = "rgba(0, 255, 127, 0.1)" # Latar belakang hijau transparan
+        return (f'color: {color}; '
+                f'background-color: {background}; '
+                f'font-weight: bold; '
+                f'border-radius: 4px; '
+                f'text-align: center; '
+                f'padding: 5px;')
+    else:
+        # Warna yang lembut untuk Output = 0
+        return (f'color: #AAAAAA; '
+                f'text-align: center; '
+                f'padding: 5px;')
+        
 # --- Antarmuka Streamlit ---
 # --- Antarmuka Streamlit Baru ---
 st.set_page_config(layout="centered") # Membuat konten berada di tengah
-st.title("💡 Kalkulator Logika Kustom")
+st.title("💡 Kalkulator Logika Kustom") # Judul diperbarui
 st.markdown("---")
 
 
@@ -77,25 +97,41 @@ with st.container(border=True):
             st.success(f"Output **{selected_gate}** dari **{A}** dan **{B}** adalah: **{hasil}**")
 
 
-# 4. TABEL KEBENARAN
+# 4. TABEL KEBENARAN BARU
 st.markdown("---")
 st.subheader("📋 Tabel Kebenaran")
 
+# --- Memproses Data Tabel ---
 if selected_gate != 'NOT':
+    # Data Gerbang 2 Input (AND, OR, XOR)
     data = {
         'A': [0, 0, 1, 1],
         'B': [0, 1, 0, 1],
-        f'A {selected_gate} B': [
+        f'Output {selected_gate}': [
             globals()[f'gate_{selected_gate.lower()}'](0, 0),
             globals()[f'gate_{selected_gate.lower()}'](0, 1),
             globals()[f'gate_{selected_gate.lower()}'](1, 0),
             globals()[f'gate_{selected_gate.lower()}'](1, 1),
         ]
     }
-    st.table(data)
+    df = pd.DataFrame(data)
+    
+    # Menerapkan styling ke kolom Output
+    # Index kolom output adalah 2
+    styled_df = df.style.applymap(style_output, subset=[f'Output {selected_gate}'])
+    
+    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+
+
 else:
+    # Data Gerbang NOT
     data = {
         'A': [0, 1],
-        f'NOT A': [gate_not(0), gate_not(1)],
+        f'Output NOT': [gate_not(0), gate_not(1)],
     }
-    st.table(data)
+    df = pd.DataFrame(data)
+    
+    # Menerapkan styling ke kolom Output
+    styled_df = df.style.applymap(style_output, subset=['Output NOT'])
+    
+    st.dataframe(styled_df, use_container_width=True, hide_index=True)
