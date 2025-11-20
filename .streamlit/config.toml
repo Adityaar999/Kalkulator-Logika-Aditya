@@ -1,11 +1,15 @@
 [theme]
-# Warna primer (digunakan untuk tombol aktif)
-primaryColor="#00AEEF" 
-# Warna latar belakang utama (sangat gelap)
-backgroundColor="#0D121F" 
-# Warna latar belakang sekunder (untuk sidebar/kotak)
-secondaryBackgroundColor="#18233C"
-# Warna teks
-textColor="#FFFFFF" 
-# Font
+# Warna primer: Biru tua/abu-abu (dari armor/latar belakang gelap)
+primaryColor="#577D7D" # Sedikit lebih terang agar tombol terlihat
+
+# Warna latar belakang utama: Sangat gelap, seperti area bayangan di wallpaper
+backgroundColor="#0D1117" 
+
+# Warna latar belakang sekunder: Untuk kontainer/kotak, sedikit lebih terang dari background utama
+secondaryBackgroundColor="#1C232F" 
+
+# Warna teks: Putih terang agar mudah dibaca di latar belakang gelap
+textColor="#FAFAFA" 
+
+# Font tetap sans serif
 font="sans serif"
