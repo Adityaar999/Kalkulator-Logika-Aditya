@@ -114,11 +114,11 @@ with st.container(border=True):
             
 
     with col4:
-        st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True) 
+        st.markdown("<div style='margin-top: -15px;'></div>", unsafe_allow_html=True) 
         if st.button("HITUNG", width='stretch', key="btn_hitung"):
             st.session_state['calculated'] = True
             st.session_state['last_A'] = A 
-            st.session_state['last_B'] = B 
+            st.session_state['last_B'] = B
             
             # Logika Hitung
             gate_func = globals()[f'gate_{selected_gate.lower()}']
