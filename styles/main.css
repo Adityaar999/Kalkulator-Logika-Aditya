@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap'); /* Contoh font dengan gaya unik */
+
+
+/* --- Terapkan Font ke Judul H1 --- */
+h1 {
+    font-family: 'Creepster', cursive !important; /* Gunakan nama font dari @import atau @font-face */
+    color: black !important; /* Pastikan judul terlihat di background hijau */
+    text-align: center;
+    font-size: 3em; /* Perbesar ukuran font */
+}
+
+/* --- Override styling default Streamlit --- */
+div.stSelectbox > label {
+    color: black; /* Warna label dropdown */
+}
+div.stRadio > label {
+    color: black; /* Warna label radio */
+}
+/* Menyesuaikan warna teks pada dropdown options */
+div[data-testid="stExpander"] div[role="button"] {
+    color: black;
+}
+p {
+    color: black; /* Warna paragraf */
+}
+div.stSuccess {
+    background-color: #388E3C; /* Warna background kotak sukses */
+    color: black; /* Warna teks di kotak sukses */
+}
+/* Untuk styling tabel */
+.stDataFrame {
+    color: black; /* Warna teks di tabel */
+}
+.stDataFrame thead th {
+    color: black; /* Warna header tabel */
+    background-color: #388E3C; /* Background header tabel */
+}
+.stDataFrame tbody tr {
+    color: black; /* Warna teks di body tabel */
+}
+.stDataFrame tbody td {
+    color: black;
+}
+/* Untuk styling baris aktif di tabel */
+.stDataFrame tbody tr[data-highlighted="true"] {
+    background-color: rgba(0, 0, 0, 0.1); /* Latar belakang hitam transparan untuk baris aktif */
+}

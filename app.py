@@ -65,7 +65,10 @@ def style_output(val: Literal[0, 1]):
                 f'text-align: center; '
                 f'padding: 5px;')
 
-
+# --- Memuat CSS kustom ---
+with open("styles/main.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    
 # --- TAMPILAN STREAMLIT (Mockup Horizontal Flow) ---
 st.set_page_config(layout="centered") 
 

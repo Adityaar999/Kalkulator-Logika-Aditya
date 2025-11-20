@@ -9,7 +9,7 @@ backgroundColor="#4CAF50" # Contoh hijau, bisa disesuaikan
 secondaryBackgroundColor="#388E3C" 
 
 # Warna teks: Hitam untuk keterbacaan di latar belakang hijau
-textColor="#000000" 
+textColor="#fcfafaff" 
 
 # Font tetap sans serif untuk elemen UI lainnya
 font="sans serif"
