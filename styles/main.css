@@ -11,10 +11,6 @@
     background-attachment: fixed;
 }
 
-/* --- 3. Menghapus Bilah Header Hitam --- */
-[data-testid="stHeader"] {
-    display: none !important;
-}
 
 /* --- 4. Terapkan Font ke Judul H1 --- */
 h1 {
