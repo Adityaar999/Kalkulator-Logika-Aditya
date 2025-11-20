@@ -1,10 +1,15 @@
 [theme]
-primaryColor="#577D7D" # Sedikit lebih terang agar tombol terlihat
+# Warna primer: Kontras terang agar tombol tetap terlihat
+primaryColor="#FFFFFF" 
 
-backgroundColor="#ffffffff" 
+# Warna latar belakang utama: Hijau solid dari logo
+backgroundColor="#4CAF50" # Contoh hijau, bisa disesuaikan
 
-secondaryBackgroundColor="#1C232F" 
+# Warna latar belakang sekunder: Sedikit lebih gelap dari hijau utama agar ada kontras
+secondaryBackgroundColor="#388E3C" 
 
-textColor="#FAFAFA" 
+# Warna teks: Hitam untuk keterbacaan di latar belakang hijau
+textColor="#000000" 
 
+# Font tetap sans serif untuk elemen UI lainnya
 font="sans serif"
