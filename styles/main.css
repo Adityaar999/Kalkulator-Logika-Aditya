@@ -61,3 +61,6 @@ div.stSuccess > div > p {
 [data-testid="stHeader"] {
     display: none !important;
 }
+[data-testid="stAppViewContainer"] > div:first-child {
+    padding-top: 0px !important;
+}
