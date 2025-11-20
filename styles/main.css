@@ -58,3 +58,6 @@ div.stSuccess > div > p {
 .stDataFrame tbody td {
     color: white !important;
 }
+[data-testid="stHeader"] {
+    display: none !important;
+}
