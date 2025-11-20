@@ -1,30 +1,22 @@
 import streamlit as st
-import pandas as pd # <-- PERBARUAN: Tambahkan import Pandas
+import pandas as pd
+# Tambahkan ini di bagian atas file, di bawah import pd:
+from typing import Literal # Digunakan untuk tipe data yang lebih spesifik
 
-# --- Fungsi Logika Gerbang ---
-def gate_and(A, B):
-    # AND: Output 1 hanya jika A=1 DAN B=1
-    return 1 if (A == 1 and B == 1) else 0
 
-def gate_or(A, B):
-    # OR: Output 1 jika A=1 ATAU B=1
-    return 1 if (A == 1 or B == 1) else 0
+# ... (Fungsi gate_and, gate_or, gate_not, gate_xor, style_output tetap sama) ...
 
-def gate_not(A):
-    # NOT: Membalikkan input
-    return 1 if A == 0 else 0
-
-def gate_xor(A, B):
-    # XOR: Output 1 jika input BERBEDA
-    return 1 if (A != B) else 0
+# 4. TABEL KEBENARAN BARU
+st.markdown("---")
+st.subheader("📋 Tabel Kebenaran")
 
 # --- Fungsi Styling untuk HTML ---
-def style_output(val):
+# Fungsi ini tetap sama, hanya untuk styling sel Output 1
+def style_output(val: Literal[0, 1]):
     """Mengembalikan style CSS/HTML untuk menyorot Output = 1 (True)"""
-    # Warna yang mirip dengan tampilan True pada Streamlit
     if val == 1:
         color = "#00FF7F" # Hijau Cerah
-        background = "rgba(0, 255, 127, 0.1)" # Latar belakang hijau transparan
+        background = "rgba(0, 255, 127, 0.1)" 
         return (f'color: {color}; '
                 f'background-color: {background}; '
                 f'font-weight: bold; '
@@ -32,70 +24,44 @@ def style_output(val):
                 f'text-align: center; '
                 f'padding: 5px;')
     else:
-        # Warna yang lembut untuk Output = 0
         return (f'color: #AAAAAA; '
                 f'text-align: center; '
                 f'padding: 5px;')
+
+# --- Fungsi Styling BARIS BARU ---
+def highlight_current_row(row):
+    """Menyorot baris di Tabel Kebenaran yang sesuai dengan Input A dan B terakhir yang dihitung."""
+    # Ambil input terakhir yang dihitung dari session_state
+    if 'last_A' in st.session_state and 'last_B' in st.session_state:
+        last_A = st.session_state['last_A']
+        last_B = st.session_state['last_B']
         
-# --- Antarmuka Streamlit ---
-# --- Antarmuka Streamlit Baru ---
-st.set_page_config(layout="centered") # Membuat konten berada di tengah
-st.title("💡 Kalkulator Logika Kustom") # Judul diperbarui
-st.markdown("---")
-
-
-# 1. KOTAK PENGATURAN INPUT
-with st.container(border=True):
-    st.header("⚙️ Pengaturan Gerbang")
-
-    # Membuat 3 kolom untuk Input A, Operator, dan Input B
-    col_A, col_OP, col_B = st.columns([1, 1.5, 1]) 
-
-    with col_A:
-        # Mengubah label input menjadi Teks True/False
-        A_label = st.radio("**Input A**", ["0 (False)", "1 (True)"], horizontal=True)
-        A = int(A_label[0]) # Mengambil nilai biner (0 atau 1)
-
-    with col_B:
-        # Input B akan didefinisikan nanti, karena bisa disembunyikan
-        B_label = st.radio("**Input B**", ["0 (False)", "1 (True)"], horizontal=True)
-        B = int(B_label[0])
-
-    with col_OP:
-        selected_gate = st.radio(
-            "**Pilih Operator**",
-            ('AND', 'OR', 'XOR', 'NOT'),
-            horizontal=True # Tombol operator disusun horizontal
-        )
-        # Menghilangkan Input B jika operatornya adalah NOT
-        if selected_gate == 'NOT':
-            # Ini akan menyembunyikan input B dari tampilan
-            B = 0 
-            col_B.empty() # Membersihkan kolom B jika NOT
+        # Periksa apakah baris data A dan B sama dengan input terakhir
+        is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         
-    # Tombol Hitung diletakkan di bawah kolom
-    st.markdown("---")
+        if is_current_row:
+            # Mengatur styling untuk seluruh baris
+            # Kita bisa menggunakan warna background yang lembut untuk row yang aktif
+            return ['background-color: rgba(255, 255, 255, 0.1)' for _ in row] 
     
-    # 2. PROSES HITUNG
-    if st.button(f"Hitung Hasil **{selected_gate}**", use_container_width=True):
-        hasil = None
-        
-        if selected_gate == 'AND':
-            hasil = gate_and(A, B)
-        elif selected_gate == 'OR':
-            hasil = gate_or(A, B)
-        elif selected_gate == 'NOT':
-            hasil = gate_not(A)
-        elif selected_gate == 'XOR':
-            hasil = gate_xor(A, B)
-        
-        # 3. KOTAK HASIL
-        st.subheader("✅ Hasil")
-        if selected_gate == 'NOT':
-             st.success(f"Output **NOT** dari **{A} ({A_label.split(' ')[1]})** adalah: **{hasil}**")
-        else:
-            st.success(f"Output **{selected_gate}** dari **{A}** dan **{B}** adalah: **{hasil}**")
+    # Mengembalikan style kosong untuk baris lainnya
+    return ['' for _ in row]
 
+# --- Tambahkan Session State di PROSES HITUNG (Langkah 2) ---
+
+# Ubah bagian 2. PROSES HITUNG menjadi:
+# ...
+    if st.button(f"Hitung Hasil **{selected_gate}**", use_container_width=True):
+        
+        # --- PERBARUAN PENTING: Simpan input saat ini di session state ---
+        st.session_state['last_A'] = A 
+        st.session_state['last_B'] = B
+        # ----------------------------------------------------------------
+        
+        hasil = None
+# ... (lanjutkan kode hitung sampai ke 3. KOTAK HASIL) ...
+
+# --- MODIFIKASI 4. TABEL KEBENARAN ---
 
 # 4. TABEL KEBENARAN BARU
 st.markdown("---")
@@ -116,9 +82,11 @@ if selected_gate != 'NOT':
     }
     df = pd.DataFrame(data)
     
-    # Menerapkan styling ke kolom Output
-    # Index kolom output adalah 2
+    # 1. Terapkan styling sel Output (hijau jika 1)
     styled_df = df.style.applymap(style_output, subset=[f'Output {selected_gate}'])
+    
+    # 2. Terapkan styling baris (sorot baris yang baru dihitung)
+    styled_df = styled_df.apply(highlight_current_row, axis=1) # axis=1 berarti apply per baris
     
     st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
@@ -131,7 +99,19 @@ else:
     }
     df = pd.DataFrame(data)
     
-    # Menerapkan styling ke kolom Output
+    # Terapkan styling sel Output
     styled_df = df.style.applymap(style_output, subset=['Output NOT'])
     
+    # Karena NOT hanya punya satu input, kita hanya perlu mencocokkan A
+    if 'last_A' in st.session_state:
+        last_A = st.session_state['last_A']
+        
+        def highlight_not_row(row):
+            is_current_row = (row['A'] == last_A)
+            if is_current_row:
+                return ['background-color: rgba(255, 255, 255, 0.1)' for _ in row] 
+            return ['' for _ in row]
+            
+        styled_df = styled_df.apply(highlight_not_row, axis=1)
+
     st.dataframe(styled_df, use_container_width=True, hide_index=True)
