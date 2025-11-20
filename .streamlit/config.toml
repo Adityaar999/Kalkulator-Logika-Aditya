@@ -1,0 +1,11 @@
+[theme]
+# Warna primer (digunakan untuk tombol aktif)
+primaryColor="#00AEEF" 
+# Warna latar belakang utama (sangat gelap)
+backgroundColor="#0D121F" 
+# Warna latar belakang sekunder (untuk sidebar/kotak)
+secondaryBackgroundColor="#18233C"
+# Warna teks
+textColor="#FFFFFF" 
+# Font
+font="sans serif"
