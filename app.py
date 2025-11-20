@@ -114,6 +114,8 @@ with st.container(border=True):
             
 
     with col4:
+        # KOREKSI FINAL: Menggunakan margin-top negatif yang sudah terbukti efektif 
+        # untuk menyejajarkan tombol dengan dropdown input.
         st.markdown("<div style='margin-top: -15px;'></div>", unsafe_allow_html=True) 
         if st.button("HITUNG", width='stretch', key="btn_hitung"):
             st.session_state['calculated'] = True
@@ -182,13 +184,11 @@ if current_selected_gate != 'NOT':
     }
     df = pd.DataFrame(data)
     
-    # Perbaikan: Mengganti .applymap dengan .map
     styled_df = df.style.map(style_output, subset=[f'Output ({current_selected_gate})'])
     
     if st.session_state.get('calculated', False):
         styled_df = styled_df.apply(highlight_current_row, axis=1) 
     
-    # Perbaikan: Mengganti use_container_width=True dengan width='stretch'
     st.dataframe(styled_df, width='stretch', hide_index=True)
 
 else:
@@ -199,11 +199,9 @@ else:
     }
     df = pd.DataFrame(data)
     
-    # Perbaikan: Mengganti .applymap dengan .map
     styled_df = df.style.map(style_output, subset=[f'Output (NOT)'])
     
     if st.session_state.get('calculated', False):
         styled_df = styled_df.apply(highlight_not_row, axis=1)
 
-    # Perbaikan: Mengganti use_container_width=True dengan width='stretch'
     st.dataframe(styled_df, width='stretch', hide_index=True)
