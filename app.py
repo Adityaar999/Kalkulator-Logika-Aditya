@@ -30,79 +30,110 @@ OPTIONS = {
     "1 (True)": 1
 }
 
-# --- FUNGSI STYLING ---
+# --- FUNGSI STYLING TABEL (HILANGKAN HIGHLIGHT HIJAU, GANTI HIGHLIGHT GREY MENJADI HIJAU) ---
+
+# Fungsi untuk menyorot baris yang dihitung menjadi hijau muda (light green)
 def highlight_current_row(row):
-    """Menyorot baris di Tabel Kebenaran untuk gerbang 2 input."""
+    """Menyorot baris di Tabel Kebenaran untuk gerbang 2 input menjadi hijau."""
     if 'last_A' in st.session_state and 'last_B' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            # Mengubah highlight menjadi putih transparan 
-            return ['background-color: rgba(255, 255, 255, 0.4)' for _ in row] 
+            # Highlight baris yang dihitung dengan warna hijau muda
+            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
 def highlight_not_row(row):
-    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT."""
+    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT menjadi hijau."""
     if 'last_A' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            # Mengubah highlight menjadi putih transparan
-            return ['background-color: rgba(255, 255, 255, 0.4)' for _ in row] 
+            # Highlight baris yang dihitung dengan warna hijau muda
+            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
-    """Mengembalikan style CSS/HTML untuk menyorot Output = 1 (True)"""
+    """Mengubah warna teks Output 1 menjadi hijau. Output 0 tetap abu-abu."""
     if val == 1:
-        color = "#00FF7F" 
-        background = "rgba(0, 255, 127, 0.1)" 
+        color = "#00FF7F" # Hijau terang
         return (f'color: {color}; '
-                f'background-color: {background}; '
                 f'font-weight: bold; '
-                f'border-radius: 4px; '
                 f'text-align: center; '
                 f'padding: 5px;')
     else:
+        # Warna abu-abu (Grey)
         return (f'color: #AAAAAA; '
                 f'text-align: center; '
                 f'padding: 5px;')
 
-# --- APLIKASI UTAMA ---
+# --- Memuat CSS Kustom & Background Biru ---
 
-# KONFIGURASI HALAMAN
 st.set_page_config(layout="centered") 
 
-# --- STYLING GLOBAL & BACKGROUND ---
-# Ini akan membuat background elemen Streamlit transparan
-# dan menjaga background wallpaper Anda tetap terlihat
 custom_css = """
 <style>
-/* Membuat tampilan Streamlit lebih simpel dan transparan */
+/* Menghilangkan background hijau lama pada output */
+/* Perubahan ini digantikan oleh style_output yang hanya mengubah warna teks */
+/* --- BACKGROUND BIRU DAN TAMPILAN KARTU PUTIH --- */
 .stApp {
-    background-color: transparent; 
+    background: linear-gradient(to right, #0077b6, #00b4d8); /* Gradien Biru */
+    background-attachment: fixed; /* Membuat background tetap saat scroll */
 }
+
+/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (seperti kartu) */
 section.main {
-    background-color: rgba(255, 255, 255, 0.85); /* Container utama (putih transparan) */
-    padding-top: 50px;
-    padding-bottom: 50px;
+    background-color: rgba(255, 255, 255, 0.95); /* Putih hampir solid */
     border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
-/* Menghapus padding/margin default jika perlu */
+/* Menghilangkan header default Streamlit */
 header {
     visibility: hidden;
+}
+
+/* Menggunakan font tebal dan warna biru tua */
+h1 {
+    color: #03045e; /* Biru Tua */
+    font-size: 40px;
+    font-weight: 800;
+    text-align: left;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #00b4d8;
+    padding-bottom: 5px;
+}
+
+/* Styling untuk Container Input/Hitung */
+.stContainer {
+    border: none !important; 
+    padding: 10px;
+}
+
+/* Mengubah warna latar belakang tombol Hitung (Opsional, sesuaikan) */
+div.stButton > button {
+    background-color: #0077b6; /* Biru */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
 }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
     
-# --- HEADER ---
-st.markdown("<h1 style='text-align: center;'>Kalkulator Gerbang Logika V.3</h1>", unsafe_allow_html=True)
+# --- HEADER DAN JUDUL UTAMA ---
+st.title("Kalkulator Gerbang Logika V.3")
 
-# Menggunakan container utama untuk semua input dan tombol hitung
-with st.container(border=True):
+# --- KARTU UTAMA DENGAN INPUT DAN HITUNG ---
+# Semua input dan tombol HITUNG diletakkan di dalam container yang sama
+with st.container():
     
-    col1, col2, col3, col4 = st.columns([1, 1, 1, 0.7]) 
+    # 1. TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
+    col1, col2, col3 = st.columns([1, 1, 1]) 
 
     with col1:
         A_label = st.selectbox(
@@ -133,40 +164,38 @@ with st.container(border=True):
             B = 0 
             st.markdown("<p style='margin-top: 30px; font-size: 12px; color: grey;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
             
-
-    with col4:
-        # Menyejajarkan tombol dengan CSS
-        st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
-        if st.button("HITUNG", width='stretch', key="btn_hitung"):
-            st.session_state['calculated'] = True
-            st.session_state['last_A'] = A 
-            st.session_state['last_B'] = B
-            
-            # Logika Hitung
-            gate_func = globals()[f'gate_{selected_gate.lower()}']
-            hasil = gate_func(A, B) if selected_gate != 'NOT' else gate_func(A)
-            
-            # Simpan hasil ke session_state
-            st.session_state['hasil_display'] = hasil
-            st.session_state['selected_gate_display'] = selected_gate
-            st.session_state['A_display'] = A
-            st.session_state['B_display'] = B
+    # 2. TATA LETAK TOMBOL HITUNG: Diletakkan di bawah input, memanjang
+    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True) 
+    if st.button("HITUNG", width='stretch', key="btn_hitung"):
+        st.session_state['calculated'] = True
+        st.session_state['last_A'] = A 
+        st.session_state['last_B'] = B
         
-        # Logika reset 
-        current_B_check = B if selected_gate != 'NOT' else 0
+        # Logika Hitung
+        gate_func = globals()[f'gate_{selected_gate.lower()}']
+        hasil = gate_func(A, B) if selected_gate != 'NOT' else gate_func(A)
         
-        if st.session_state.get('calculated', False):
-            is_gate_changed = st.session_state.get('selected_gate_display') != selected_gate
-            is_A_changed = st.session_state['last_A'] != A
-            is_B_changed = st.session_state['last_B'] != current_B_check and selected_gate != 'NOT'
-            
-            if is_gate_changed or is_A_changed or is_B_changed:
-                 st.session_state['calculated'] = False
+        # Simpan hasil ke session_state
+        st.session_state['hasil_display'] = hasil
+        st.session_state['selected_gate_display'] = selected_gate
+        st.session_state['A_display'] = A
+        st.session_state['B_display'] = B
+    
+    # Logika reset 
+    current_B_check = B if selected_gate != 'NOT' else 0
+    
+    if st.session_state.get('calculated', False):
+        is_gate_changed = st.session_state.get('selected_gate_display') != selected_gate
+        is_A_changed = st.session_state['last_A'] != A
+        is_B_changed = st.session_state['last_B'] != current_B_check and selected_gate != 'NOT'
+        
+        if is_gate_changed or is_A_changed or is_B_changed:
+             st.session_state['calculated'] = False
 
-# 6. KOTAK HASIL (Muncul setelah HITUNG ditekan)
+# 3. KOTAK HASIL (Muncul setelah HITUNG ditekan)
 if st.session_state.get('calculated', False):
     st.markdown("---")
-    with st.container(border=True):
+    with st.container():
         hasil = st.session_state['hasil_display']
         selected_gate_display = st.session_state['selected_gate_display']
         A_display = st.session_state['A_display']
@@ -181,7 +210,7 @@ if st.session_state.get('calculated', False):
             st.success(f"Output **{selected_gate_display}** dari **{A_label}** dan **{B_label}** adalah: **{hasil}**")
 
 
-# --- 7. TABEL KEBENARAN (Hanya Muncul Setelah Hitung) ---
+# 4. TABEL KEBENARAN (Hanya Muncul Setelah Hitung)
 if st.session_state.get('calculated', False):
     st.markdown("---")
 
@@ -205,6 +234,7 @@ if st.session_state.get('calculated', False):
         }
         df = pd.DataFrame(data)
         
+        # Terapkan styling
         styled_df = df.style.map(style_output, subset=[f'Output ({current_selected_gate})'])
         styled_df = styled_df.apply(highlight_current_row, axis=1) 
         
@@ -218,6 +248,7 @@ if st.session_state.get('calculated', False):
         }
         df = pd.DataFrame(data)
         
+        # Terapkan styling
         styled_df = df.style.map(style_output, subset=[f'Output (NOT)'])
         styled_df = styled_df.apply(highlight_not_row, axis=1)
 
@@ -225,7 +256,6 @@ if st.session_state.get('calculated', False):
 
 
 # --- FOOTER COPYRIGHT ---
-# Tambahkan di bagian paling bawah file app.py Anda
 st.markdown("---")
 footer_html = """
 <style>
@@ -235,11 +265,12 @@ footer_html = """
     bottom: 0;
     width: 100%;
     background-color: transparent;
-    color: grey;
+    color: #03045e; /* Warna teks biru tua */
     text-align: center;
     padding: 10px;
     font-size: 12px; 
-    z-index: 1000; /* Pastikan footer selalu di atas */
+    z-index: 1000; 
+    font-weight: bold;
 }
 </style>
 <div class="footer">
