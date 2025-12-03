@@ -104,28 +104,6 @@ header {
     text-align: center;
 }
 
-/* --- JUDUL STYLING (DI DALAM INPUT CARD BIRU) --- */
-/* Judul utama Kalkulator Gerbang Logika V.3 */
-.header-card h1 {
-    color: #4b0082; /* Warna teks ungu gelap */
-    font-size: 30px; 
-    font-weight: 800;
-    text-align: center; 
-    margin-bottom: 0px; 
-    padding-bottom: 0px;
-}
-
-
-/* --- 4. INPUT CARD (GRADASI BIRU TUA) --- */
-.input-card-bg {
-    background: linear-gradient(to bottom, #03045e, #001f3f); 
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-.input-card-bg label {
-    color: white !important;
-}
 
 /* Styling untuk tombol Hitung */
 div.stButton > button {
