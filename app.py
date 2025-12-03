@@ -30,17 +30,16 @@ OPTIONS = {
     "1 (True)": 1
 }
 
-# --- FUNGSI STYLING TABEL (HILANGKAN HIGHLIGHT HIJAU, GANTI HIGHLIGHT GREY MENJADI HIJAU) ---
+# --- FUNGSI STYLING TABEL ---
 
-# Fungsi untuk menyorot baris yang dihitung menjadi hijau muda (light green)
 def highlight_current_row(row):
-    """Menyorot baris di Tabel Kebenaran untuk gerbang 2 input menjadi hijau."""
+    """Menyorot baris yang dihitung menjadi hijau muda."""
     if 'last_A' in st.session_state and 'last_B' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            # Highlight baris yang dihitung dengan warna hijau muda
+            # Highlight baris yang dihitung dengan warna hijau muda transparan
             return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
@@ -50,36 +49,36 @@ def highlight_not_row(row):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            # Highlight baris yang dihitung dengan warna hijau muda
+            # Highlight baris yang dihitung dengan warna hijau muda transparan
             return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
-    """Mengubah warna teks Output 1 menjadi hijau. Output 0 tetap abu-abu."""
+    """Mengubah warna teks Output 1 dan 0 menjadi PUTIH."""
+    # SEMUA angka di tabel akan berwarna putih,
+    # tetapi angka 1 (True) akan menjadi tebal (bold).
     if val == 1:
-        color = "#00FF7F" # Hijau terang
-        return (f'color: {color}; '
+        return (f'color: white; '
                 f'font-weight: bold; '
                 f'text-align: center; '
                 f'padding: 5px;')
     else:
-        # Warna abu-abu (Grey)
-        return (f'color: #AAAAAA; '
+        return (f'color: white; '
                 f'text-align: center; '
                 f'padding: 5px;')
 
-# --- Memuat CSS Kustom & Background Biru ---
+# --- APLIKASI UTAMA ---
 
 st.set_page_config(layout="centered") 
 
+# --- STYLING GLOBAL & BACKGROUND ---
 custom_css = """
 <style>
-/* Menghilangkan background hijau lama pada output */
-/* Perubahan ini digantikan oleh style_output yang hanya mengubah warna teks */
-/* --- BACKGROUND BIRU DAN TAMPILAN KARTU PUTIH --- */
+/* --- BACKGROUND GRADASI BIRU --- */
 .stApp {
-    background: linear-gradient(to right, #0077b6, #00b4d8); /* Gradien Biru */
-    background-attachment: fixed; /* Membuat background tetap saat scroll */
+    /* Menggunakan gradasi biru tua ke biru muda */
+    background: linear-gradient(to bottom, #03045e, #00b4d8); 
+    background-attachment: fixed; 
 }
 
 /* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (seperti kartu) */
@@ -91,12 +90,10 @@ section.main {
     margin-top: 30px;
     margin-bottom: 30px;
 }
-/* Menghilangkan header default Streamlit */
 header {
     visibility: hidden;
 }
 
-/* Menggunakan font tebal dan warna biru tua */
 h1 {
     color: #03045e; /* Biru Tua */
     font-size: 40px;
@@ -107,19 +104,33 @@ h1 {
     padding-bottom: 5px;
 }
 
-/* Styling untuk Container Input/Hitung */
-.stContainer {
-    border: none !important; 
-    padding: 10px;
+/* Mengubah style tabel (membuat background tabel lebih gelap/kontras dengan background putih utama) */
+.dataframe {
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang gelap untuk tabel */
+    color: white; 
+    border-radius: 5px;
+}
+.dataframe th {
+    background-color: rgba(0, 0, 0, 0.9) !important; /* Header tabel lebih gelap */
+    color: white !important;
 }
 
-/* Mengubah warna latar belakang tombol Hitung (Opsional, sesuaikan) */
+/* Styling untuk tombol Hitung */
 div.stButton > button {
-    background-color: #0077b6; /* Biru */
+    background-color: #0077b6;
     color: white;
     border-radius: 5px;
     border: none;
     font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+div.stButton > button:hover {
+    background-color: #005f99; 
+}
+
+/* Mengatur warna teks di footer menjadi biru tua */
+.footer p {
+    color: #03045e !important; 
 }
 </style>
 """
@@ -129,10 +140,9 @@ st.markdown(custom_css, unsafe_allow_html=True)
 st.title("Kalkulator Gerbang Logika V.3")
 
 # --- KARTU UTAMA DENGAN INPUT DAN HITUNG ---
-# Semua input dan tombol HITUNG diletakkan di dalam container yang sama
 with st.container():
     
-    # 1. TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
+    # TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
     col1, col2, col3 = st.columns([1, 1, 1]) 
 
     with col1:
@@ -164,7 +174,7 @@ with st.container():
             B = 0 
             st.markdown("<p style='margin-top: 30px; font-size: 12px; color: grey;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
             
-    # 2. TATA LETAK TOMBOL HITUNG: Diletakkan di bawah input, memanjang
+    # TATA LETAK TOMBOL HITUNG
     st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True) 
     if st.button("HITUNG", width='stretch', key="btn_hitung"):
         st.session_state['calculated'] = True
@@ -192,7 +202,7 @@ with st.container():
         if is_gate_changed or is_A_changed or is_B_changed:
              st.session_state['calculated'] = False
 
-# 3. KOTAK HASIL (Muncul setelah HITUNG ditekan)
+# KOTAK HASIL (Muncul setelah HITUNG ditekan)
 if st.session_state.get('calculated', False):
     st.markdown("---")
     with st.container():
@@ -210,7 +220,7 @@ if st.session_state.get('calculated', False):
             st.success(f"Output **{selected_gate_display}** dari **{A_label}** dan **{B_label}** adalah: **{hasil}**")
 
 
-# 4. TABEL KEBENARAN (Hanya Muncul Setelah Hitung)
+# TABEL KEBENARAN (Hanya Muncul Setelah Hitung)
 if st.session_state.get('calculated', False):
     st.markdown("---")
 
@@ -255,7 +265,7 @@ if st.session_state.get('calculated', False):
         st.dataframe(styled_df, width='stretch', hide_index=True)
 
 
-# --- FOOTER COPYRIGHT ---
+# FOOTER COPYRIGHT
 st.markdown("---")
 footer_html = """
 <style>
@@ -265,7 +275,7 @@ footer_html = """
     bottom: 0;
     width: 100%;
     background-color: transparent;
-    color: #03045e; /* Warna teks biru tua */
+    color: #03045e; 
     text-align: center;
     padding: 10px;
     font-size: 12px; 
