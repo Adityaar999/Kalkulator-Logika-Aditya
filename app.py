@@ -70,13 +70,13 @@ st.set_page_config(layout="centered")
 # --- STYLING GLOBAL & BACKGROUND ---
 custom_css = """
 <style>
-/* --- BACKGROUND GRADASI BIRU UTAMA --- */
+/* --- 1. BACKGROUND GRADASI BIRU UTAMA --- */
 .stApp {
     background: linear-gradient(to bottom, #03045e, #00b4d8); 
     background-attachment: fixed; 
 }
 
-/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (MAIN CARD) */
+/* --- 2. MAIN CARD PUTIH (Membungkus Semua) --- */
 section.main {
     background-color: rgba(255, 255, 255, 0.95); 
     border-radius: 10px;
@@ -89,27 +89,54 @@ header {
     visibility: hidden;
 }
 
-/* --- JUDUL STYLING (DI DALAM MAIN CARD) --- */
-h1 {
-    color: #03045e; 
-    font-size: 40px;
-    font-weight: 800;
-    text-align: center; 
-    margin-bottom: 20px;
-    padding-bottom: 5px;
+/* --- 3. HEADER CARD/BANNER BIRU (Disini Perubahannya) --- */
+.header-card {
+    /* Gradasi Biru Muda ke Biru Sedang (Matching dengan background) */
+    background: linear-gradient(to bottom, #00b4d8, #0077b6); 
+    color: white; /* Warna teks putih */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.header-card p {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+    color: #f0f0f0; /* Teks deskripsi lebih terang */
 }
 
-/* --- STYLING INPUT CARD BARU (GRADASI BIRU TUA) --- */
+/* --- JUDUL STYLING (DI DALAM HEADER CARD BIRU) --- */
+.header-card h1 {
+    color: white; /* Warna teks putih */
+    font-size: 30px; 
+    font-weight: 800;
+    text-align: center; 
+    margin-bottom: 0px; 
+    padding-bottom: 0px;
+}
+
+
+/* --- 4. INPUT CARD (GRADASI BIRU TUA) --- */
 .input-card-bg {
-    /* GRADASI BIRU TUA PADA CARD INPUT */
     background: linear-gradient(to bottom, #03045e, #001f3f); 
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
 }
-/* Memastikan semua teks label di dalam card input berwarna putih */
 .input-card-bg label {
     color: white !important;
+}
+
+/* Styling untuk tombol Hitung */
+div.stButton > button {
+    background-color: #0077b6;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: -3px; 
 }
 
 /* Mengubah style tabel */
@@ -123,19 +150,6 @@ h1 {
     color: white !important;
 }
 
-/* Styling untuk tombol Hitung */
-div.stButton > button {
-    background-color: #0077b6;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-div.stButton > button:hover {
-    background-color: #005f99; 
-}
-
 /* Mengatur warna teks di footer menjadi biru tua */
 .footer p {
     color: #03045e !important; 
@@ -144,14 +158,17 @@ div.stButton > button:hover {
 """
 st.markdown(custom_css, unsafe_allow_html=True)
     
-# --- HEADER DAN JUDUL UTAMA (MASUK DI DALAM MAIN CARD) ---
+# --- 1. HEADER CARD/BANNER BIRU (MASUK DI DALAM MAIN CARD PUTIH) ---
+st.markdown("<div class='header-card'>", unsafe_allow_html=True)
 st.title("Kalkulator Gerbang Logika V.3")
+st.markdown("<p>Tugas Logika Digital | By Aditya Rizky Nugroho</p>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
-# --- KARTU INPUT KHUSUS (GRADASI BIRU TUA) ---
+# --- 2. KARTU INPUT KHUSUS (GRADASI BIRU TUA) ---
 st.markdown("<div class='input-card-bg'>", unsafe_allow_html=True)
 
 # TATA LETAK INPUT: 4 kolom untuk Input A, Operator, Input B, dan Tombol Hitung
-col1, col2, col3, col4 = st.columns([1, 1, 1, 1]) 
+col1, col2, col3, col4 = st.columns([1.2, 1.2, 1.2, 0.8]) 
 
 with col1:
     A_label = st.selectbox(
@@ -184,7 +201,7 @@ with col3:
         
 with col4:
     # TATA LETAK TOMBOL HITUNG
-    st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
+    st.markdown("<div style='height: 29px;'></div>", unsafe_allow_html=True) 
     if st.button("HITUNG", width='stretch', key="btn_hitung"):
         st.session_state['calculated'] = True
         st.session_state['last_A'] = A 
