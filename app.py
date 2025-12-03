@@ -70,53 +70,8 @@ st.set_page_config(layout="centered")
 # --- STYLING GLOBAL & BACKGROUND ---
 custom_css = """
 <style>
-/* --- 1. BACKGROUND GRADASI BIRU UTAMA --- */
-.stApp {
-    background: linear-gradient(to bottom, #03045e, #00b4d8); 
-    background-attachment: fixed; 
-}
 
-/* --- 2. MAIN CARD PUTIH (Membungkus Semua) --- */
-/* Padding Main Card dikurangi sedikit agar Header/Banner tidak terlalu jauh dari tepi */
-section.main {
-    background-color: rgba(255, 255, 255, 0.95); 
-    border-radius: 10px;
-    padding: 20px; /* Padding dikurangi dari 30px */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-header {
-    visibility: hidden;
-}
-
-/* --- 3. BANNER CARD (GRADASI BIRU UTAMA) --- */
-.header-card {
-    /* Gradasi Biru Tua ke Biru Sedang (Menyatu dengan Input Card) */
-    background: linear-gradient(to right, #001f3f, #03045e); 
-    color: white; 
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 25px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.header-card h1 {
-    color: white; 
-    font-size: 30px; 
-    font-weight: 800;
-    text-align: center; 
-    margin-bottom: 0px; 
-    padding-bottom: 0px;
-}
-.header-card p {
-    margin: 0;
-    font-size: 14px;
-    text-align: center;
-    color: #f0f0f0; 
-}
-
-
-/* --- 4. INPUT CARD (GRADASI BIRU TUA) --- */
+/* --- INPUT CARD (GRADASI BIRU TUA) --- */
 .input-card-bg {
     /* Gradasi Biru Tua yang dibuat agar terasa menyatu dengan header */
     background: linear-gradient(to bottom, #03045e, #001f3f); 
@@ -129,35 +84,7 @@ header {
     color: white !important;
 }
 
-/* Styling untuk tombol Hitung */
-div.stButton > button {
-    background-color: #0077b6;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-top: -3px; 
-}
 
-/* Mengubah style tabel */
-.dataframe {
-    background-color: rgba(0, 0, 0, 0.7); 
-    color: white; 
-    border-radius: 5px;
-}
-.dataframe th {
-    background-color: rgba(0, 0, 0, 0.9) !important; 
-    color: white !important;
-}
-
-/* Mengatur warna teks di footer menjadi biru tua */
-.footer p {
-    color: #03045e !important; 
-}
-</style>
-"""
-st.markdown(custom_css, unsafe_allow_html=True)
     
 # --- 1. HEADER CARD/BANNER BIRU (MASUK DI DALAM MAIN CARD PUTIH) ---
 # Container ini sekarang berfungsi sebagai bar/bilah judul yang menyatu
