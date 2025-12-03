@@ -132,8 +132,8 @@ h3 {
 
 /* Styling untuk tombol Hitung */
 div.stButton > button {
-    background-color: #ec4899; /* Tombol Pink/Ungu seperti contoh HTML, tapi di-dark-kan */
-    color: white;
+    background-color: #00b4d8; /* DIUBAH: Biru Cyan */
+    color: #001f3f; /* Teks Biru Tua Solid */
     border-radius: 8px;
     border: none;
     padding: 10px 16px;
@@ -144,8 +144,9 @@ div.stButton > button {
 }
 
 div.stButton > button:hover {
-    background: #db2777; 
+    background: #0077b6; /* Warna biru lebih gelap saat hover */
     transform: scale(1.03); 
+    color: white; /* Teks putih saat hover */
 }
 
 /* Mengubah style tabel agar kontras di Card gelap */
@@ -188,8 +189,8 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # --- KONTEN (SEKARANG BERADA DI DALAM CARD UTAMA) ---
 
 # 1. JUDUL DAN DESKRIPSI
-st.title("Kalkulator Gerbang Logika V.3")
-st.markdown("Tugas Logika Digital | By Aditya Rizky Nugroho")
+st.title("Kalkulator Gerbang Logika")
+st.markdown("Tugas Kalkulator Logika | By Aditya Rizky Nugroho")
 
 # Garis pemisah
 st.markdown("<hr style='border: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0;'>", unsafe_allow_html=True)
