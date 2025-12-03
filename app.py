@@ -77,10 +77,11 @@ custom_css = """
 }
 
 /* --- 2. MAIN CARD PUTIH (Membungkus Semua) --- */
+/* Padding Main Card dikurangi sedikit agar Header/Banner tidak terlalu jauh dari tepi */
 section.main {
     background-color: rgba(255, 255, 255, 0.95); 
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px; /* Padding dikurangi dari 30px */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 30px;
     margin-bottom: 30px;
@@ -89,40 +90,40 @@ header {
     visibility: hidden;
 }
 
-/* --- 3. HEADER CARD/BANNER BIRU (Disini Perubahannya) --- */
+/* --- 3. BANNER CARD (GRADASI BIRU UTAMA) --- */
 .header-card {
-    /* Gradasi Biru Muda ke Biru Sedang (Matching dengan background) */
-    background: linear-gradient(to bottom, #00b4d8, #0077b6); 
-    color: white; /* Warna teks putih */
+    /* Gradasi Biru Tua ke Biru Sedang (Menyatu dengan Input Card) */
+    background: linear-gradient(to right, #001f3f, #03045e); 
+    color: white; 
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 25px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.header-card p {
-    margin: 0;
-    font-size: 14px;
-    text-align: center;
-    color: #f0f0f0; /* Teks deskripsi lebih terang */
-}
-
-/* --- JUDUL STYLING (DI DALAM HEADER CARD BIRU) --- */
 .header-card h1 {
-    color: white; /* Warna teks putih */
+    color: white; 
     font-size: 30px; 
     font-weight: 800;
     text-align: center; 
     margin-bottom: 0px; 
     padding-bottom: 0px;
 }
+.header-card p {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+    color: #f0f0f0; 
+}
 
 
 /* --- 4. INPUT CARD (GRADASI BIRU TUA) --- */
 .input-card-bg {
+    /* Gradasi Biru Tua yang dibuat agar terasa menyatu dengan header */
     background: linear-gradient(to bottom, #03045e, #001f3f); 
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    margin-top: -20px; /* Diangkat ke atas untuk mengurangi jarak dengan Header Card */
 }
 .input-card-bg label {
     color: white !important;
@@ -159,6 +160,7 @@ div.stButton > button {
 st.markdown(custom_css, unsafe_allow_html=True)
     
 # --- 1. HEADER CARD/BANNER BIRU (MASUK DI DALAM MAIN CARD PUTIH) ---
+# Container ini sekarang berfungsi sebagai bar/bilah judul yang menyatu
 st.markdown("<div class='header-card'>", unsafe_allow_html=True)
 st.title("Kalkulator Gerbang Logika V.3")
 st.markdown("<p>Tugas Logika Digital | By Aditya Rizky Nugroho</p>", unsafe_allow_html=True)
@@ -301,14 +303,14 @@ footer_html = """
 .footer {
     position: fixed;
     left: 0;
-    bottom: 0;
+    bottom: 0;      
     width: 100%;
     background-color: transparent;
     color: #03045e; 
     text-align: center;
     padding: 10px;
     font-size: 12px; 
-    z-index: 1000; 
+    z-index: 1000; /* Z-index yang tinggi memastikan footer berada di atas elemen lain */
     font-weight: bold;
 }
 </style>
