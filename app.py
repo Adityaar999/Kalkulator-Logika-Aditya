@@ -39,7 +39,8 @@ def highlight_current_row(row):
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
+            # Gunakan warna kontras yang cocok dengan background gelap (contoh: hijau gelap)
+            return ['background-color: rgba(0, 100, 0, 0.5)' for _ in row] 
     return ['' for _ in row]
 
 def highlight_not_row(row):
@@ -48,18 +49,18 @@ def highlight_not_row(row):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
+            return ['background-color: rgba(0, 100, 0, 0.5)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
-    """Mengubah warna teks Output 1 dan 0 menjadi PUTIH."""
+    """Mengubah warna teks Output 1 dan 0 menjadi PUTIH (tetap)."""
     if val == 1:
-        return (f'color: white; '
+        return (f'color: #00ff7f; ' # Hijau cerah untuk 1
                 f'font-weight: bold; '
                 f'text-align: center; '
                 f'padding: 5px;')
     else:
-        return (f'color: white; '
+        return (f'color: #ffffff; '
                 f'text-align: center; '
                 f'padding: 5px;')
 
@@ -67,65 +68,76 @@ def style_output(val: Literal[0, 1]):
 
 st.set_page_config(layout="centered") 
 
-# --- STYLING GLOBAL & BACKGROUND ---
+# --- STYLING GLOBAL & BACKGROUND (SEKARANG JADI CARD UTAMA) ---
 custom_css = """
 <style>
-/* --- 1. BACKGROUND GRADASI BIRU UTAMA --- */
+/* --- 1. BACKGROUND UTAMA (DI LUAR CARD) --- */
+/* Dibuat sangat gelap/hitam agar Card utama gradasi biru terlihat menonjol */
 .stApp {
-    background: linear-gradient(to bottom, #03045e, #00b4d8); 
+    background-color: #00001a; 
     background-attachment: fixed; 
 }
 
-/* --- 2. MAIN CARD PUTIH (Membungkus Semua) --- */
-/* Padding Main Card dikurangi sedikit agar Header/Banner tidak terlalu jauh dari tepi */
+/* --- 2. CARD UTAMA (GRADASI BIRU TUA) --- */
+/* stApp container diatur ulang sebagai Card Utama */
+/* Streamlit membungkus konten di dalam `section.main`, jadi kita styling section.main */
 section.main {
-    background-color: rgba(255, 255, 255, 0.95); 
-    border-radius: 10px;
-    padding: 20px; /* Padding dikurangi dari 30px */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    margin-bottom: 30px;
+    /* Gradasi Biru Tua */
+    background: linear-gradient(to bottom, #03045e, #001f3f); 
+    color: white; /* Teks default putih */
+    border-radius: 15px; /* Sudut lebih membulat */
+    padding: 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    margin: 40px auto; /* Margin atas dan bawah agar ada ruang */
+    max-width: 800px; /* Batasan lebar card utama */
 }
 header {
     visibility: hidden;
 }
 
-/* --- 3. BANNER CARD (GRADASI BIRU UTAMA) --- */
-.header-card {
-    /* Gradasi Biru Tua ke Biru Sedang (Menyatu dengan Input Card) */
-    background: linear-gradient(to right, #001f3f, #03045e); 
-    color: white; 
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 25px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.header-card h1 {
-    color: white; 
-    font-size: 30px; 
+/* --- JUDUL STYLING (DI DALAM CARD UTAMA) --- */
+h1 {
+    color: #00b4d8; /* Warna biru cerah */
+    font-size: 38px; 
     font-weight: 800;
     text-align: center; 
-    margin-bottom: 0px; 
+    margin-bottom: 5px; 
     padding-bottom: 0px;
 }
-.header-card p {
-    margin: 0;
-    font-size: 14px;
+.stMarkdown > div:first-child > p {
+    color: #e0e0e0; 
     text-align: center;
-    color: #f0f0f0; 
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+h3 {
+    color: #00b4d8;
 }
 
 
-/* --- 4. INPUT CARD (GRADASI BIRU TUA) --- */
+/* --- 3. INPUT CARD (AREA INPUT) --- */
 .input-card-bg {
-    /* Gradasi Biru Tua yang dibuat agar terasa menyatu dengan header */
-    background: linear-gradient(to bottom, #03045e, #001f3f); 
+    /* Background area input dibuat sedikit gelap */
+    background-color: rgba(0, 0, 0, 0.4); 
     padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
-    margin-top: -20px; /* Diangkat ke atas untuk mengurangi jarak dengan Header Card */
+    margin-bottom: 25px;
 }
 .input-card-bg label {
+    color: #00b4d8 !important; /* Label input biru cerah */
+    font-weight: bold;
+}
+
+/* Styling Dropdown/Selectbox di dalam Input Card */
+.stSelectbox div[data-baseweb="select"] {
+    background-color: #2c3e50 !important; /* Warna input dropdown gelap */
+    color: white;
+    border-radius: 5px;
+}
+/* Memastikan semua teks di dalam selectbox berwarna putih */
+.stSelectbox p {
     color: white !important;
 }
 
@@ -142,31 +154,35 @@ div.stButton > button {
 
 /* Mengubah style tabel */
 .dataframe {
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: rgba(0, 0, 0, 0.5); /* Background tabel agak transparan gelap */
     color: white; 
     border-radius: 5px;
 }
 .dataframe th {
-    background-color: rgba(0, 0, 0, 0.9) !important; 
-    color: white !important;
+    background-color: rgba(0, 0, 0, 0.7) !important; 
+    color: #00b4d8 !important; /* Header tabel biru cerah */
 }
 
-/* Mengatur warna teks di footer menjadi biru tua */
+/* Styling Kotak Hasil (Success Box) */
+.stSuccess > div {
+    background-color: rgba(0, 179, 216, 0.2) !important; /* Biru muda transparan */
+    color: white !important;
+    border-left: 5px solid #00b4d8 !important;
+}
+
+/* Mengatur warna teks di footer menjadi kontras */
 .footer p {
-    color: #03045e !important; 
+    color: #90e0ef !important; /* Biru muda sangat terang */
 }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
-    
-# --- 1. HEADER CARD/BANNER BIRU (MASUK DI DALAM MAIN CARD PUTIH) ---
-# Container ini sekarang berfungsi sebagai bar/bilah judul yang menyatu
-st.markdown("<div class='header-card'>", unsafe_allow_html=True)
-st.title("Kalkulator Gerbang Logika V.3")
-st.markdown("<p>Tugas Logika Digital | By Aditya Rizky Nugroho</p>", unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
 
-# --- 2. KARTU INPUT KHUSUS (GRADASI BIRU TUA) ---
+# --- JUDUL UTAMA (DI DALAM CARD GRADASI BIRU TUA) ---
+st.title("Kalkulator Gerbang Logika V.3")
+st.markdown("Tugas Logika Digital | By Aditya Rizky Nugroho")
+
+# --- KARTU INPUT KHUSUS (DARK GREY) ---
 st.markdown("<div class='input-card-bg'>", unsafe_allow_html=True)
 
 # TATA LETAK INPUT: 4 kolom untuk Input A, Operator, Input B, dan Tombol Hitung
@@ -240,7 +256,7 @@ if st.session_state.get('calculated', False):
         hasil = st.session_state['hasil_display']
         selected_gate_display = st.session_state['selected_gate_display']
         A_display = st.session_state['A_display']
-        B_display = st.session_state['B_display']
+        B_display = st.session_state['last_B'] # Gunakan last_B untuk mencocokkan hasil
         
         A_label = list(OPTIONS.keys())[list(OPTIONS.values()).index(A_display)]
         B_label = list(OPTIONS.keys())[list(OPTIONS.values()).index(B_display)]
@@ -294,6 +310,7 @@ if st.session_state.get('calculated', False):
         styled_df = styled_df.apply(highlight_not_row, axis=1)
 
         st.dataframe(styled_df, width='stretch', hide_index=True)
+
 
 
 # FOOTER COPYRIGHT
