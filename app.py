@@ -136,7 +136,6 @@ div.stButton > button {
 st.markdown(custom_css, unsafe_allow_html=True)
     
 # --- 1. HEADER CARD/BANNER PINK (MASUK DI DALAM MAIN CARD PUTIH) ---
-st.markdown("<div class='header-card'>", unsafe_allow_html=True)
 st.title("Kalkulator Gerbang Logika")
 st.markdown("<p>Tugas Logika Digital | By Aditya Rizky Nugroho</p>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
