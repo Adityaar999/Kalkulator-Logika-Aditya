@@ -76,7 +76,7 @@ except FileNotFoundError:
 # --- TAMPILAN STREAMLIT ---
 st.set_page_config(layout="centered") 
 
-st.markdown("<h1 style='text-align: center;'>Kalkulator Gerbang Logika</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Kalkulator Gerbang Logika :)</h1>", unsafe_allow_html=True)
 
 # Menggunakan container utama untuk semua input dan tombol hitung
 with st.container(border=True):
