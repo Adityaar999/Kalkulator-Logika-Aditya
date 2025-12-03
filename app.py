@@ -33,7 +33,7 @@ OPTIONS = {
 # --- FUNGSI STYLING TABEL ---
 
 def highlight_current_row(row):
-    """Menyorot baris yang dihitung menjadi hijau muda."""
+    """Menyorot baris yang dihitung menjadi hijau muda transparan."""
     if 'last_A' in st.session_state and 'last_B' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         last_B = st.session_state['last_B']
@@ -44,19 +44,17 @@ def highlight_current_row(row):
     return ['' for _ in row]
 
 def highlight_not_row(row):
-    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT menjadi hijau."""
+    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT menjadi hijau muda transparan."""
     if 'last_A' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            # Highlight baris yang dihitung dengan warna hijau muda transparan
             return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
     """Mengubah warna teks Output 1 dan 0 menjadi PUTIH."""
-    # SEMUA angka di tabel akan berwarna putih,
-    # tetapi angka 1 (True) akan menjadi tebal (bold).
+    # Semua angka di tabel akan berwarna putih
     if val == 1:
         return (f'color: white; '
                 f'font-weight: bold; '
@@ -76,12 +74,11 @@ custom_css = """
 <style>
 /* --- BACKGROUND GRADASI BIRU --- */
 .stApp {
-    /* Menggunakan gradasi biru tua ke biru muda */
     background: linear-gradient(to bottom, #03045e, #00b4d8); 
     background-attachment: fixed; 
 }
 
-/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (seperti kartu) */
+/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (seperti kartu utama) */
 section.main {
     background-color: rgba(255, 255, 255, 0.95); /* Putih hampir solid */
     border-radius: 10px;
@@ -94,24 +91,47 @@ header {
     visibility: hidden;
 }
 
+/* --- Styling Judul --- */
 h1 {
-    color: #03045e; /* Biru Tua */
+    color: #03045e; 
     font-size: 40px;
     font-weight: 800;
-    text-align: left;
+    text-align: center; /* **CENTERED** */
     margin-bottom: 20px;
-    border-bottom: 3px solid #00b4d8;
+    /* Garis biru border-bottom dihilangkan */
     padding-bottom: 5px;
+}
+
+/* --- STYLING INPUT CARD BARU (BIRU TUA) --- */
+.input-card-bg {
+    background-color: #03045e; /* Warna biru tua menyambung dengan gradasi background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+/* Memastikan semua teks label di dalam card input berwarna putih */
+.input-card-bg label {
+    color: white !important;
+}
+
+/* Menghapus garis-garis abu-abu (default Streamlit) */
+.stContainer {
+    border: none !important;
+}
+/* Menambahkan border pada container hasil (success box) */
+.stSuccess {
+    border: 1px solid #00b4d8 !important; 
+    background-color: rgba(0, 179, 216, 0.1) !important; /* Biru muda transparan */
 }
 
 /* Mengubah style tabel (membuat background tabel lebih gelap/kontras dengan background putih utama) */
 .dataframe {
-    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang gelap untuk tabel */
+    background-color: rgba(0, 0, 0, 0.7); 
     color: white; 
     border-radius: 5px;
 }
 .dataframe th {
-    background-color: rgba(0, 0, 0, 0.9) !important; /* Header tabel lebih gelap */
+    background-color: rgba(0, 0, 0, 0.9) !important; 
     color: white !important;
 }
 
@@ -139,43 +159,44 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # --- HEADER DAN JUDUL UTAMA ---
 st.title("Kalkulator Gerbang Logika V.3")
 
-# --- KARTU UTAMA DENGAN INPUT DAN HITUNG ---
-with st.container():
-    
-    # TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
-    col1, col2, col3 = st.columns([1, 1, 1]) 
+# --- KARTU INPUT KHUSUS (BIRU TUA) ---
+st.markdown("<div class='input-card-bg'>", unsafe_allow_html=True)
 
-    with col1:
-        A_label = st.selectbox(
-            "Input A:", 
+# TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
+col1, col2, col3, col4 = st.columns([1, 1, 1, 1]) 
+
+with col1:
+    A_label = st.selectbox(
+        "Input A:", 
+        options=list(OPTIONS.keys()),
+        index=1,
+        key="select_a"
+    )
+    A = OPTIONS[A_label]
+
+with col2:
+    selected_gate = st.selectbox(
+        "Operator:",
+        options=('AND', 'OR', 'XOR', 'NOT', 'NAND', 'NOR', 'XNOR'),
+        key="select_gate"
+    )
+
+with col3:
+    if selected_gate != 'NOT':
+        B_label = st.selectbox(
+            "Input B:", 
             options=list(OPTIONS.keys()),
             index=1,
-            key="select_a"
+            key="select_b"
         )
-        A = OPTIONS[A_label]
-
-    with col2:
-        selected_gate = st.selectbox(
-            "Operator:",
-            options=('AND', 'OR', 'XOR', 'NOT', 'NAND', 'NOR', 'XNOR'),
-            key="select_gate"
-        )
-
-    with col3:
-        if selected_gate != 'NOT':
-            B_label = st.selectbox(
-                "Input B:", 
-                options=list(OPTIONS.keys()),
-                index=1,
-                key="select_b"
-            )
-            B = OPTIONS[B_label]
-        else:
-            B = 0 
-            st.markdown("<p style='margin-top: 30px; font-size: 12px; color: grey;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
-            
+        B = OPTIONS[B_label]
+    else:
+        B = 0 
+        st.markdown("<p style='margin-top: 30px; font-size: 12px; color: grey;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
+        
+with col4:
     # TATA LETAK TOMBOL HITUNG
-    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True) 
+    st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
     if st.button("HITUNG", width='stretch', key="btn_hitung"):
         st.session_state['calculated'] = True
         st.session_state['last_A'] = A 
@@ -190,21 +211,24 @@ with st.container():
         st.session_state['selected_gate_display'] = selected_gate
         st.session_state['A_display'] = A
         st.session_state['B_display'] = B
+
+# Tutup input card custom
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Logika reset 
+current_B_check = B if selected_gate != 'NOT' else 0
+
+if st.session_state.get('calculated', False):
+    is_gate_changed = st.session_state.get('selected_gate_display') != selected_gate
+    is_A_changed = st.session_state['last_A'] != A
+    is_B_changed = st.session_state['last_B'] != current_B_check and selected_gate != 'NOT'
     
-    # Logika reset 
-    current_B_check = B if selected_gate != 'NOT' else 0
-    
-    if st.session_state.get('calculated', False):
-        is_gate_changed = st.session_state.get('selected_gate_display') != selected_gate
-        is_A_changed = st.session_state['last_A'] != A
-        is_B_changed = st.session_state['last_B'] != current_B_check and selected_gate != 'NOT'
-        
-        if is_gate_changed or is_A_changed or is_B_changed:
-             st.session_state['calculated'] = False
+    if is_gate_changed or is_A_changed or is_B_changed:
+         st.session_state['calculated'] = False
 
 # KOTAK HASIL (Muncul setelah HITUNG ditekan)
 if st.session_state.get('calculated', False):
-    st.markdown("---")
+    st.markdown("---") # Garis pemisah
     with st.container():
         hasil = st.session_state['hasil_display']
         selected_gate_display = st.session_state['selected_gate_display']
@@ -222,7 +246,7 @@ if st.session_state.get('calculated', False):
 
 # TABEL KEBENARAN (Hanya Muncul Setelah Hitung)
 if st.session_state.get('calculated', False):
-    st.markdown("---")
+    st.markdown("---") # Garis pemisah
 
     current_selected_gate = selected_gate 
     st.subheader(f"📋 Tabel Kebenaran {current_selected_gate}")
@@ -266,7 +290,7 @@ if st.session_state.get('calculated', False):
 
 
 # FOOTER COPYRIGHT
-st.markdown("---")
+st.markdown("---") # Garis pemisah
 footer_html = """
 <style>
 .footer {
