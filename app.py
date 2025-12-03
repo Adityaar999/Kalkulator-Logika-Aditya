@@ -38,7 +38,8 @@ def highlight_current_row(row):
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            return ['background-color: rgba(255, 255, 255, 0.2)' for _ in row] 
+            # Mengubah highlight menjadi putih transparan 
+            return ['background-color: rgba(255, 255, 255, 0.4)' for _ in row] 
     return ['' for _ in row]
 
 def highlight_not_row(row):
@@ -47,7 +48,8 @@ def highlight_not_row(row):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            return ['background-color: rgba(255, 255, 255, 0.2)' for _ in row] 
+            # Mengubah highlight menjadi putih transparan
+            return ['background-color: rgba(255, 255, 255, 0.4)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
@@ -66,17 +68,36 @@ def style_output(val: Literal[0, 1]):
                 f'text-align: center; '
                 f'padding: 5px;')
 
-# --- Memuat CSS kustom ---
-try:
-    with open("styles/main.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-except FileNotFoundError:
-    st.warning("Peringatan: File styles/main.css tidak ditemukan.")
-    
-# --- TAMPILAN STREAMLIT ---
+# --- APLIKASI UTAMA ---
+
+# KONFIGURASI HALAMAN
 st.set_page_config(layout="centered") 
 
-st.markdown("<h1 style='text-align: center;'>Kalkulator Gerbang Logika :)</h1>", unsafe_allow_html=True)
+# --- STYLING GLOBAL & BACKGROUND ---
+# Ini akan membuat background elemen Streamlit transparan
+# dan menjaga background wallpaper Anda tetap terlihat
+custom_css = """
+<style>
+/* Membuat tampilan Streamlit lebih simpel dan transparan */
+.stApp {
+    background-color: transparent; 
+}
+section.main {
+    background-color: rgba(255, 255, 255, 0.85); /* Container utama (putih transparan) */
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border-radius: 10px;
+}
+/* Menghapus padding/margin default jika perlu */
+header {
+    visibility: hidden;
+}
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
+    
+# --- HEADER ---
+st.markdown("<h1 style='text-align: center;'>Kalkulator Gerbang Logika V.3</h1>", unsafe_allow_html=True)
 
 # Menggunakan container utama untuk semua input dan tombol hitung
 with st.container(border=True):
@@ -114,9 +135,8 @@ with st.container(border=True):
             
 
     with col4:
-        # KOREKSI FINAL: Menggunakan margin-top negatif yang sudah terbukti efektif 
-        # untuk menyejajarkan tombol dengan dropdown input.
-        st.markdown("<div style='margin-top: -50px;'></div>", unsafe_allow_html=True) 
+        # Menyejajarkan tombol dengan CSS
+        st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
         if st.button("HITUNG", width='stretch', key="btn_hitung"):
             st.session_state['calculated'] = True
             st.session_state['last_A'] = A 
@@ -132,7 +152,7 @@ with st.container(border=True):
             st.session_state['A_display'] = A
             st.session_state['B_display'] = B
         
-        # Logika reset yang lebih kuat
+        # Logika reset 
         current_B_check = B if selected_gate != 'NOT' else 0
         
         if st.session_state.get('calculated', False):
@@ -161,47 +181,69 @@ if st.session_state.get('calculated', False):
             st.success(f"Output **{selected_gate_display}** dari **{A_label}** dan **{B_label}** adalah: **{hasil}**")
 
 
-# --- 7. TABEL KEBENARAN ---
-st.markdown("---")
+# --- 7. TABEL KEBENARAN (Hanya Muncul Setelah Hitung) ---
+if st.session_state.get('calculated', False):
+    st.markdown("---")
 
-current_selected_gate = selected_gate 
-st.subheader(f"📋 Tabel Kebenaran {current_selected_gate}")
+    current_selected_gate = selected_gate 
+    st.subheader(f"📋 Tabel Kebenaran {current_selected_gate}")
 
-# --- Memproses Data Tabel ---
-if current_selected_gate != 'NOT':
-    # Data Gerbang 2 Input 
-    gate_func = globals()[f'gate_{current_selected_gate.lower()}']
-    
-    data = {
-        'A': [0, 0, 1, 1],
-        'B': [0, 1, 0, 1],
-        f'Output ({current_selected_gate})': [
-            gate_func(0, 0),
-            gate_func(0, 1),
-            gate_func(1, 0),
-            gate_func(1, 1),
-        ]
-    }
-    df = pd.DataFrame(data)
-    
-    styled_df = df.style.map(style_output, subset=[f'Output ({current_selected_gate})'])
-    
-    if st.session_state.get('calculated', False):
+    # --- Memproses Data Tabel ---
+    if current_selected_gate != 'NOT':
+        # Data Gerbang 2 Input 
+        gate_func = globals()[f'gate_{current_selected_gate.lower()}']
+        
+        data = {
+            'A': [0, 0, 1, 1],
+            'B': [0, 1, 0, 1],
+            f'Output ({current_selected_gate})': [
+                gate_func(0, 0),
+                gate_func(0, 1),
+                gate_func(1, 0),
+                gate_func(1, 1),
+            ]
+        }
+        df = pd.DataFrame(data)
+        
+        styled_df = df.style.map(style_output, subset=[f'Output ({current_selected_gate})'])
         styled_df = styled_df.apply(highlight_current_row, axis=1) 
-    
-    st.dataframe(styled_df, width='stretch', hide_index=True)
+        
+        st.dataframe(styled_df, width='stretch', hide_index=True)
 
-else:
-    # Data Gerbang NOT
-    data = {
-        'A': [0, 1],
-        f'Output (NOT)': [gate_not(0), gate_not(1)],
-    }
-    df = pd.DataFrame(data)
-    
-    styled_df = df.style.map(style_output, subset=[f'Output (NOT)'])
-    
-    if st.session_state.get('calculated', False):
+    else:
+        # Data Gerbang NOT
+        data = {
+            'A': [0, 1],
+            f'Output (NOT)': [gate_not(0), gate_not(1)],
+        }
+        df = pd.DataFrame(data)
+        
+        styled_df = df.style.map(style_output, subset=[f'Output (NOT)'])
         styled_df = styled_df.apply(highlight_not_row, axis=1)
 
-    st.dataframe(styled_df, width='stretch', hide_index=True)
+        st.dataframe(styled_df, width='stretch', hide_index=True)
+
+
+# --- FOOTER COPYRIGHT ---
+# Tambahkan di bagian paling bawah file app.py Anda
+st.markdown("---")
+footer_html = """
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: transparent;
+    color: grey;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px; 
+    z-index: 1000; /* Pastikan footer selalu di atas */
+}
+</style>
+<div class="footer">
+    <p>© 2025 Aditya Rizky Nugroho — Kalkulator Logika</p>
+</div>
+"""
+st.markdown(footer_html, unsafe_allow_html=True)
