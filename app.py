@@ -39,7 +39,6 @@ def highlight_current_row(row):
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            # Highlight baris yang dihitung dengan warna hijau muda transparan
             return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
     return ['' for _ in row]
 
@@ -54,7 +53,6 @@ def highlight_not_row(row):
 
 def style_output(val: Literal[0, 1]):
     """Mengubah warna teks Output 1 dan 0 menjadi PUTIH."""
-    # Semua angka di tabel akan berwarna putih
     if val == 1:
         return (f'color: white; '
                 f'font-weight: bold; '
@@ -72,15 +70,15 @@ st.set_page_config(layout="centered")
 # --- STYLING GLOBAL & BACKGROUND ---
 custom_css = """
 <style>
-/* --- BACKGROUND GRADASI BIRU --- */
+/* --- BACKGROUND GRADASI BIRU UTAMA --- */
 .stApp {
     background: linear-gradient(to bottom, #03045e, #00b4d8); 
     background-attachment: fixed; 
 }
 
-/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (seperti kartu utama) */
+/* Mengatur Container Streamlit agar memiliki latar belakang putih transparan (MAIN CARD) */
 section.main {
-    background-color: rgba(255, 255, 255, 0.95); /* Putih hampir solid */
+    background-color: rgba(255, 255, 255, 0.95); 
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -91,20 +89,20 @@ header {
     visibility: hidden;
 }
 
-/* --- Styling Judul --- */
+/* --- JUDUL STYLING (DI DALAM MAIN CARD) --- */
 h1 {
     color: #03045e; 
     font-size: 40px;
     font-weight: 800;
-    text-align: center; /* **CENTERED** */
+    text-align: center; 
     margin-bottom: 20px;
-    /* Garis biru border-bottom dihilangkan */
     padding-bottom: 5px;
 }
 
-/* --- STYLING INPUT CARD BARU (BIRU TUA) --- */
+/* --- STYLING INPUT CARD BARU (GRADASI BIRU TUA) --- */
 .input-card-bg {
-    background-color: #03045e; /* Warna biru tua menyambung dengan gradasi background */
+    /* GRADASI BIRU TUA PADA CARD INPUT */
+    background: linear-gradient(to bottom, #03045e, #001f3f); 
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -114,17 +112,7 @@ h1 {
     color: white !important;
 }
 
-/* Menghapus garis-garis abu-abu (default Streamlit) */
-.stContainer {
-    border: none !important;
-}
-/* Menambahkan border pada container hasil (success box) */
-.stSuccess {
-    border: 1px solid #00b4d8 !important; 
-    background-color: rgba(0, 179, 216, 0.1) !important; /* Biru muda transparan */
-}
-
-/* Mengubah style tabel (membuat background tabel lebih gelap/kontras dengan background putih utama) */
+/* Mengubah style tabel */
 .dataframe {
     background-color: rgba(0, 0, 0, 0.7); 
     color: white; 
@@ -156,13 +144,13 @@ div.stButton > button:hover {
 """
 st.markdown(custom_css, unsafe_allow_html=True)
     
-# --- HEADER DAN JUDUL UTAMA ---
+# --- HEADER DAN JUDUL UTAMA (MASUK DI DALAM MAIN CARD) ---
 st.title("Kalkulator Gerbang Logika V.3")
 
-# --- KARTU INPUT KHUSUS (BIRU TUA) ---
+# --- KARTU INPUT KHUSUS (GRADASI BIRU TUA) ---
 st.markdown("<div class='input-card-bg'>", unsafe_allow_html=True)
 
-# TATA LETAK INPUT: 3 kolom untuk Input A, Operator, dan Input B
+# TATA LETAK INPUT: 4 kolom untuk Input A, Operator, Input B, dan Tombol Hitung
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1]) 
 
 with col1:
@@ -192,7 +180,7 @@ with col3:
         B = OPTIONS[B_label]
     else:
         B = 0 
-        st.markdown("<p style='margin-top: 30px; font-size: 12px; color: grey;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
+        st.markdown("<p style='margin-top: 30px; font-size: 12px; color: #BBBBBB;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
         
 with col4:
     # TATA LETAK TOMBOL HITUNG
@@ -228,7 +216,7 @@ if st.session_state.get('calculated', False):
 
 # KOTAK HASIL (Muncul setelah HITUNG ditekan)
 if st.session_state.get('calculated', False):
-    st.markdown("---") # Garis pemisah
+    st.markdown("---") 
     with st.container():
         hasil = st.session_state['hasil_display']
         selected_gate_display = st.session_state['selected_gate_display']
@@ -246,7 +234,7 @@ if st.session_state.get('calculated', False):
 
 # TABEL KEBENARAN (Hanya Muncul Setelah Hitung)
 if st.session_state.get('calculated', False):
-    st.markdown("---") # Garis pemisah
+    st.markdown("---") 
 
     current_selected_gate = selected_gate 
     st.subheader(f"📋 Tabel Kebenaran {current_selected_gate}")
@@ -290,7 +278,7 @@ if st.session_state.get('calculated', False):
 
 
 # FOOTER COPYRIGHT
-st.markdown("---") # Garis pemisah
+st.markdown("---") 
 footer_html = """
 <style>
 .footer {
