@@ -39,22 +39,24 @@ def highlight_current_row(row):
         last_B = st.session_state['last_B']
         is_current_row = (row['A'] == last_A) and (row['B'] == last_B)
         if is_current_row:
-            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
+            # Highlighting di dalam card gelap (background hijau tua transparan)
+            return ['background-color: rgba(0, 150, 0, 0.7)' for _ in row] 
     return ['' for _ in row]
 
 def highlight_not_row(row):
-    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT menjadi hijau muda transparan."""
+    """Menyorot baris di Tabel Kebenaran untuk gerbang NOT."""
     if 'last_A' in st.session_state and st.session_state.get('calculated', False):
         last_A = st.session_state['last_A']
         is_current_row = (row['A'] == last_A)
         if is_current_row:
-            return ['background-color: rgba(0, 255, 127, 0.3)' for _ in row] 
+            # Highlighting di dalam card gelap
+            return ['background-color: rgba(0, 150, 0, 0.7)' for _ in row] 
     return ['' for _ in row]
 
 def style_output(val: Literal[0, 1]):
-    """Mengubah warna teks Output 1 dan 0 menjadi PUTIH."""
+    """Mengubah warna teks Output 1 (hijau) dan 0 (putih)."""
     if val == 1:
-        return (f'color: white; '
+        return (f'color: #00ff7f; '
                 f'font-weight: bold; '
                 f'text-align: center; '
                 f'padding: 5px;')
@@ -67,36 +69,133 @@ def style_output(val: Literal[0, 1]):
 
 st.set_page_config(layout="centered") 
 
-# --- STYLING GLOBAL & BACKGROUND ---
+# --- STYLING GLOBAL & CARD UTAMA ---
 custom_css = """
 <style>
-
-/* --- INPUT CARD (GRADASI BIRU TUA) --- */
-.input-card-bg {
-    /* Gradasi Biru Tua yang dibuat agar terasa menyatu dengan header */
-    background: linear-gradient(to bottom, #03045e, #001f3f); 
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    margin-top: -20px; /* Diangkat ke atas untuk mengurangi jarak dengan Header Card */
+/* --- 1. BACKGROUND LUAR (Gradasi Biru) --- */
+.stApp {
+    background: linear-gradient(to bottom, #03045e, #00b4d8); /* Gradasi Biru Tua ke Biru Muda */
+    background-attachment: fixed; 
 }
-.input-card-bg label {
+
+header {
+    visibility: hidden;
+}
+
+/* --- 2. CARD UTAMA (section.main) --- */
+/* Menggunakan section.main sebagai card utama yang terpusat dan berbayangan */
+section.main {
+    background-color: #001f3f; /* Warna Biru Tua Solid (Opaque) */
+    color: white; 
+    border-radius: 15px; /* Sudut membulat */
+    padding: 30px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Bayangan kuat */
+    margin: 40px auto; /* Centered dan margin atas/bawah */
+    max-width: 800px; 
+    border: 2px solid #0077b6; /* Border tipis untuk definisi card */
+}
+
+/* --- JUDUL & TATA LETAK DI DALAM CARD --- */
+h1 {
+    color: #00b4d8; /* Judul Biru Cyan Cerah */
+    font-size: 38px; 
+    font-weight: 800;
+    text-align: center; /* Dipusatkan seperti contoh HTML */
+    margin-bottom: 5px; 
+    padding-top: 0; 
+}
+.stMarkdown p {
+    color: #f0f0f0; /* Deskripsi agak putih */
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+h3 {
+    color: #00b4d8; /* Subheader (Tabel Kebenaran) */
+}
+
+
+/* Styling Dropdown/Selectbox */
+.stSelectbox div[data-baseweb="select"] {
+    background-color: #2c3e50 !important; /* Warna input dropdown gelap */
+    color: white;
+    border-radius: 5px;
+}
+.stSelectbox p {
     color: white !important;
 }
+.stSelectbox label {
+    color: #00b4d8 !important; /* Label input biru cerah */
+}
 
+/* Styling untuk tombol Hitung */
+div.stButton > button {
+    background-color: #ec4899; /* Tombol Pink/Ungu seperti contoh HTML, tapi di-dark-kan */
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: -3px; 
+}
 
+div.stButton > button:hover {
+    background: #db2777; 
+    transform: scale(1.03); 
+}
+
+/* Mengubah style tabel agar kontras di Card gelap */
+.dataframe {
+    background-color: rgba(0, 0, 0, 0.7); 
+    color: white; 
+    border-radius: 5px;
+}
+.dataframe th {
+    background-color: rgba(0, 0, 0, 0.9) !important; 
+    color: #00b4d8 !important; /* Header tabel biru cerah */
+}
+
+/* Styling Kotak Hasil (Success Box) */
+.stSuccess > div {
+    background-color: rgba(0, 179, 216, 0.2) !important; 
+    color: white !important;
+    border-left: 5px solid #00b4d8 !important;
+    border-radius: 10px; /* Sudut membulat seperti result-box */
+}
+
+/* --- FOOTER --- */
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;      
+    width: 100%;
+    background-color: transparent;
+    color: #90e0ef; 
+    text-align: center;
+    padding: 10px;
+    font-size: 12px; 
+    z-index: 1000; 
+    font-weight: bold;
+}
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
     
-# --- 1. HEADER CARD/BANNER BIRU (MASUK DI DALAM MAIN CARD PUTIH) ---
-# Container ini sekarang berfungsi sebagai bar/bilah judul yang menyatu
-st.markdown("<div class='header-card'>", unsafe_allow_html=True)
+# --- KONTEN (SEKARANG BERADA DI DALAM CARD UTAMA) ---
+
+# 1. JUDUL DAN DESKRIPSI
 st.title("Kalkulator Gerbang Logika V.3")
-st.markdown("<p>Tugas Logika Digital | By Aditya Rizky Nugroho</p>", unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("Tugas Logika Digital | By Aditya Rizky Nugroho")
 
-# --- 2. KARTU INPUT KHUSUS (GRADASI BIRU TUA) ---
-st.markdown("<div class='input-card-bg'>", unsafe_allow_html=True)
+# Garis pemisah
+st.markdown("<hr style='border: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0;'>", unsafe_allow_html=True)
 
-# TATA LETAK INPUT: 4 kolom untuk Input A, Operator, Input B, dan Tombol Hitung
+
+# 2. INPUT 
 col1, col2, col3, col4 = st.columns([1.2, 1.2, 1.2, 0.8]) 
 
 with col1:
@@ -126,6 +225,7 @@ with col3:
         B = OPTIONS[B_label]
     else:
         B = 0 
+        # Teks bantuan di dalam card
         st.markdown("<p style='margin-top: 30px; font-size: 12px; color: #BBBBBB;'>Input B diabaikan (NOT)</p>", unsafe_allow_html=True)
         
 with col4:
@@ -146,9 +246,6 @@ with col4:
         st.session_state['A_display'] = A
         st.session_state['B_display'] = B
 
-# Tutup input card custom
-st.markdown("</div>", unsafe_allow_html=True)
-
 # Logika reset 
 current_B_check = B if selected_gate != 'NOT' else 0
 
@@ -167,7 +264,7 @@ if st.session_state.get('calculated', False):
         hasil = st.session_state['hasil_display']
         selected_gate_display = st.session_state['selected_gate_display']
         A_display = st.session_state['A_display']
-        B_display = st.session_state['B_display']
+        B_display = st.session_state['last_B']
         
         A_label = list(OPTIONS.keys())[list(OPTIONS.values()).index(A_display)]
         B_label = list(OPTIONS.keys())[list(OPTIONS.values()).index(B_display)]
@@ -223,25 +320,8 @@ if st.session_state.get('calculated', False):
         st.dataframe(styled_df, width='stretch', hide_index=True)
 
 
-
-# FOOTER COPYRIGHT
-st.markdown("---") 
+# FOOTER COPYRIGHT (Fixed)
 footer_html = """
-<style>
-.footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;      
-    width: 100%;
-    background-color: transparent;
-    color: #03045e; 
-    text-align: center;
-    padding: 10px;
-    font-size: 12px; 
-    z-index: 1000; /* Z-index yang tinggi memastikan footer berada di atas elemen lain */
-    font-weight: bold;
-}
-</style>
 <div class="footer">
     <p>© 2025 Aditya Rizky Nugroho — Kalkulator Logika</p>
 </div>
